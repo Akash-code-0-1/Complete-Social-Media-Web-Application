@@ -1,0 +1,97 @@
+.register {
+    height: 100vh;
+    background-color: rgb(146, 211, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .card {
+        display: flex;
+        width: 50%;
+        background-color: white;
+        min-height: 600px;
+        border-radius: 10px;
+        overflow: hidden;
+        flex-direction: row-reverse;
+
+        .left {
+            flex: 1;
+            background: linear-gradient(rgba(151, 65, 255, 0.437), rgb(7, 4, 4)), url('https://images.pexels.com/photos/2422293/pexels-photo-2422293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center;
+            background-size: cover;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            gap: 20px;
+
+
+            h1 {
+                font-size: 100px;
+                line-height: 100px;
+            }
+
+            p {}
+
+            span {
+                font-size: 14px;
+            }
+
+            button {
+                width: 50%;
+                padding: 10px;
+                border: none;
+                background-color: white;
+                color: rgb(94, 7, 255);
+                font: bold;
+                cursor: pointer;
+            }
+
+        }
+
+        .right {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            justify-content: center;
+
+            h1 {
+                color: solid lightgray;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+
+                .error {
+                    color: red;
+                    margin-top: 10px;
+                  }
+                  
+                  .success {
+                    color: green;
+                    margin-top: 10px;
+                  }
+
+                input {
+                    padding: 20px 10px;
+                    border: none;
+                    border-bottom: 1px solid lightgray;
+                }
+
+                button {
+                width: 50%;
+                padding: 10px;
+                border: none;
+                background-color: rgb(94, 7, 255);
+                color: white;
+                font: bold;
+                cursor: pointer;
+                }
+            }
+
+        }
+    }
+}
