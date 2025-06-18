@@ -6,9 +6,7 @@
 
 ## 📸 Screenshots
 
-> *(Add your screenshots here)*  
-> Example:  
-> ![](https://your-image-link.com/1.png)  
+> ![](https://github.com/Akash-code-0-1/Complete-Social-Media-Web-Application/blob/main/client/src/assets/projectImages/1.PNG)  
 > ![](https://your-image-link.com/2.png)
 
 ---
