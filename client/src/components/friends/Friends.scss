@@ -1,77 +1,87 @@
-.friends-list {
-    padding: 20px;
-    background-color: themed("bgSoft");
+@import "../../style.scss";
 
-    h2 {
+.friends-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  transition: 0.5s;
+
+  @include themify($themes) {
+    background-color: themed("bg");
+    color: themed("textColor");
+
+    .friends-content {
+      padding: 20px;
+
+      .back-btn {
+        background-color: themed("bgSoft");
+        color: themed("textColor");
+        border: 1px solid themed("border");
+        padding: 10px 15px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: themed("bg");
+        }
+      }
+
+      h2 {
+        font-size: 16px;
+        margin: 15px 0 10px;
         color: themed("textColorSoft");
+      }
 
-        margin-bottom: 10px;
-        font-size: 20px;
-        font-weight: 500;
-    }
-
-    ul.friendsResults {
-        position: relative;
-        width: 100%;
-        background-color: themed("bg");
-
-        border: 1px solid themed("bg");
-
-        max-height: 300px;
-        overflow-y: auto;
-
-        z-index: 100;
-
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-
-        padding: 10px 0px;
+      .friendsResults {
+        list-style: none;
+        padding: 0;
+        margin: 0;
 
         .searchResultItem {
+          display: flex;
+          align-items: center;
+          margin-bottom: 12px;
+          padding: 10px;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: background-color 0.2s ease;
+          background-color: themed("bgSoft");
+          color: themed("textColor");
+          box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+
+          &:hover {
+            background-color: themed("bg");
+          }
+
+          a {
+            text-decoration: none;
+            color: themed("textColor");
             display: flex;
             align-items: center;
 
-            padding: 10px;
-
-            margin-bottom: 5px;
-
-            box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
-
-            background-color: themed("bg");
-
-            color: themed("textColor");
-
-            border-radius: 10px;
-
-            transition: background-color 0.2s;
-
-            text-decoration: none;
-
-            a {
-                text-decoration: none;
-                color: themed("textColor");
-
-                display: flex;
-                align-items: center;
-
-                img {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    margin-right: 10px;
-                    object-fit: cover;
-                }
-
-                span {
-                    font-size: 18px;
-                }
+            img {
+              width: 30px;
+              height: 30px;
+              object-fit: cover;
+              border-radius: 50%;
+              margin-right: 10px;
             }
-        }
 
-        .searchResultItem:hover {
-            background-color: themed("bgSoft");
-
-            cursor: pointer;
+            span {
+              font-size: 16px;
+            }
+          }
         }
+      }
     }
+  }
 }

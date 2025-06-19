@@ -89,7 +89,7 @@ FULLSTACK_SOCIAL_MEDIA/
 ✅ **Social Features** – Add/remove friends, follow/unfollow, relationship tracking  
 ✅ **Responsive UI** – Optimized layout for desktop and mobile  
 ✅ **Story System** – Add and view temporary stories  
-✅ **Secure Backend** – Node.js + Express.js + MongoDB
+✅ **Secure Backend** – Node.js + Express.js + MySQL
 
 ---
 
@@ -103,8 +103,8 @@ FULLSTACK_SOCIAL_MEDIA/
 **Backend**  
 - Node.js  
 - Express.js  
-- MongoDB  
-- JWT  
+- MySQL  
+- JWT
 
 ---
 
