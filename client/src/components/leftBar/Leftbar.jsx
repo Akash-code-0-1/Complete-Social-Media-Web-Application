@@ -59,32 +59,35 @@ const Leftbar = () => {
 
 
           <div className='item' onClick={handleClick}>
-            <img src={Friends} alt='' />
-            <span>Friends</span>
+            <img src={Friends} alt='person' />
+            <span>Your Connections</span>
           </div>
 
           {showFriends && <FriendsList />}
 
-          <div className="item">
-            <img src={Memories} alt="" />
-            <span>Memories</span>
-          </div>
-
 
           <div className="item">
-            <img src={Events} alt="" />
-            <span>Events</span>
-          </div>
-
-          <div className="item">
-            <img src={Gallary} alt="" />
+            <img src={Gallary} alt="gallary" />
             <span>Gallery</span>
           </div>
 
           <div className="item">
+            <img src={Memories} alt="memories" />
+            <span>Memories</span>
+          </div>
+
+
+          {/* <div className="item">
+            <img src={Events} alt="" />
+            <span>Events</span>
+          </div> */}
+
+
+
+          {/* <div className="item">
             <img src={Gamming} alt="" />
             <span>Gamming</span>
-          </div>
+          </div> */}
 
         </div>
 
