@@ -2,8 +2,6 @@ import React, { useContext, useState } from 'react'
 import './Leftbar.scss';
 
 import Friends from '../../assets/inclusion.png';
-import Events from '../../assets/events.png';
-import Gamming from '../../assets/gamming.png';
 import Gallary from '../../assets/picture.png';
 import Message from '../../assets/chat.png';
 import Tutorials from '../../assets/video-tutorials.png';
@@ -15,12 +13,15 @@ import { AuthContext } from '../../context/authContext';
 import { Link } from 'react-router-dom';
 
 import FriendsList from '../friends/Friends';
+import Gallery from "../gallery/Gallery";
+
 
 
 
 const Leftbar = () => {
 
   const [showFriends, setShowFriends] = useState(false);
+  const [openGallery, setOpenGallery] = useState(false);
 
   const handleClick = () => {
     setShowFriends((prev) => !prev);
@@ -66,10 +67,12 @@ const Leftbar = () => {
           {showFriends && <FriendsList />}
 
 
-          <div className="item">
-            <img src={Gallary} alt="gallary" />
+          <div className="item" onClick={() => setOpenGallery(true)}>
+            <img src={Gallary} alt="gallery" />
             <span>Gallery</span>
           </div>
+
+          {openGallery && <Gallery onClose={() => setOpenGallery(false)} />}
 
           <div className="item">
             <img src={Memories} alt="memories" />

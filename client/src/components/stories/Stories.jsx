@@ -45,6 +45,7 @@ const Stories = () => {
   return (
     <div className="stories">
       {/* Add Story Section */}
+      {/* <div class="story-wrapper"> */}
       <div className="story" key={currentUser.id}>
         <img
           src={
@@ -66,6 +67,7 @@ const Stories = () => {
           onChange={handleFileChange}
         />
       </div>
+        {/* </div> */}
 
       {/* Display Stories */}
       {isLoading ? (

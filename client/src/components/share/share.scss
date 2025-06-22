@@ -60,6 +60,7 @@
         border: none;
         height: 0.5px;
         background-color: themed("border");
+        width: 93%;
       }
 
       .bottom {
@@ -97,6 +98,8 @@
             cursor: pointer;
             background-color: #5271ff;
             border-radius: 3px;
+            margin-right: 40px;
+            z-index: 10;
           }
         }
       }
