@@ -8,6 +8,9 @@ import postRoutes from "./routes/posts.js";
 import relationshipRoutes from "./routes/relationships.js";
 import storyRoutes from "./routes/stories.js";
 import friendsRouter from "./routes/friends.js";
+import suggestedFriendsRoutes from "./routes/suggestedFriends.js";
+
+
 
 
 import cors from "cors";
@@ -59,6 +62,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/relationships", relationshipRoutes);
 app.use("/api/stories", storyRoutes);
 app.use("/api/friends", friendsRouter);
+app.use("/api/suggestedFriends", suggestedFriendsRoutes);
 
 
 

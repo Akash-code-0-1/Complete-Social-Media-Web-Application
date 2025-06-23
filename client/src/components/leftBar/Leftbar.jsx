@@ -74,10 +74,10 @@ const Leftbar = () => {
 
           {openGallery && <Gallery onClose={() => setOpenGallery(false)} />}
 
-          <div className="item">
+          {/* <div className="item">
             <img src={Memories} alt="memories" />
             <span>Memories</span>
-          </div>
+          </div> */}
 
 
           {/* <div className="item">
