@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import './Navbar.scss';
 import { Link } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -13,6 +13,14 @@ import { DarkModeContext } from '../../context/darkModeContext';
 import { AuthContext } from '../../context/authContext';
 import { useQuery } from '@tanstack/react-query';
 import { makeRequest } from '../../axios'; // Assuming a pre-configured axios instance
+import moment from "moment";
+
+
+
+
+
+
+
 
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
@@ -35,28 +43,70 @@ const Navbar = () => {
     setSearchQuery(e.target.value);
   };
 
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const res = await makeRequest.get("/notifications");
+        setNotifications(res.data);
+        setUnreadCount(res.data.length);
+      } catch (err) {
+        console.error("Failed to fetch notifications", err);
+      }
+    };
+    fetchNotifications();
+  }, []);
+
+
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+
+
   return (
     <div className="navbar">
       <div className="left">
         <Link to="/" style={{ textDecoration: 'none' }}>
           <span>Junno</span>
         </Link>
-        <HomeOutlinedIcon />
+        {/* <HomeOutlinedIcon /> */}
         {darkMode ? (
           <LightModeOutlinedIcon onClick={toggle} style={{ cursor: "pointer" }} />
         ) : (
           <DarkModeOutlinedIcon onClick={toggle} style={{ cursor: "pointer" }} />
         )}
-        <GridViewOutlinedIcon />
-        <div className="search">
+        {/* <GridViewOutlinedIcon /> */}
+        <div className="search" ref={searchRef}>
           <SearchOutlinedIcon />
           <input
             type="text"
             placeholder="Search by name..."
             value={searchQuery}
-            onChange={handleSearchChange}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setShowSearchResults(true);
+            }}
+            onFocus={() => setShowSearchResults(true)}
           />
-          {searchQuery && (
+          {searchQuery && showSearchResults && (
             <div className="searchResults">
               {isLoading ? (
                 <div>Loading...</div>
@@ -68,11 +118,19 @@ const Navbar = () => {
                     to={`/profile/${user.id}`}
                     key={user.id}
                     style={{ textDecoration: 'none', color: 'inherit' }}
+                    onClick={() => {
+                      setSearchQuery('');
+                      setShowSearchResults(false); // Hide on click
+                    }}
                   >
                     <div className="searchResultItem">
                       <img
-                        src={user.profilePic ? '/upload/' + user.profilePic : +'/user-icon-1024x1024-dtzturco.png'}
-                        alt={""}
+                        src={
+                          user.profilePic
+                            ? '/upload/' + user.profilePic
+                            : '/user-icon-1024x1024-dtzturco.png'
+                        }
+                        alt=""
                       />
                       <span>{user.name}</span>
                     </div>
@@ -84,11 +142,47 @@ const Navbar = () => {
             </div>
           )}
         </div>
+
       </div>
       <div className="right">
-        <PersonOutlineOutlinedIcon />
+        {/* <PersonOutlineOutlinedIcon /> */}
         <MailOutlinedIcon />
-        <NotificationsOutlinedIcon />
+
+        {/* notification section */}
+        {/* <NotificationsOutlinedIcon /> */}
+
+        <div className="notif-icon" onClick={() => setOpen(!open)}>
+          <NotificationsOutlinedIcon />
+          {unreadCount > 0 && <span className="notif-count">{unreadCount}</span>}
+        </div>
+        {open && (
+          <div className="notif-dropdown">
+            {notifications.length === 0 ? (
+              <p>No new notifications</p>
+            ) : (
+              notifications.map((n, i) => (
+                <div className="notif-item" key={i}>
+                  <img
+                    src={n.fromPic ? "/upload/" + n.fromPic : "/default-profile.png"}
+                    alt=""
+                    className="profile-pic"
+                  />
+                  <div className="notif-content">
+                    <span className="bold">{n.fromName}</span>{" "}
+                    {n.type === "liked" && "liked your post"}
+                    {n.type === "commented" && `commented on your post`}
+                    <br />
+                    <small>{moment(n.createdAt).fromNow()}</small>
+                  </div>
+                  {n.postImg && (
+                    <img src={`/upload/${n.postImg}`} alt="post" className="thumb" />
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
 
         <Link
           to={`/profile/${currentUser.id}`}

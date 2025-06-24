@@ -31,7 +31,7 @@
                 border: 1px solid themed("border");
                 border-radius: 5px;
                 padding: 5px;
-                position: relative; // Position set to relative to allow for absolute positioning of search results
+                position: relative;
 
                 input {
                     border: none;
@@ -39,7 +39,7 @@
                     height: 100%;
                     background-color: transparent;
                     color: themed("textColor");
-                    outline: none; // Prevents the default focus highlight
+                    outline: none;
 
                     @include mobile {
                         display: none;
@@ -50,7 +50,6 @@
                     }
                 }
 
-                // New CSS for search results dropdown
                 .searchResults {
                     position: absolute;
                     top: 30px;
@@ -65,8 +64,6 @@
                     border-bottom-right-radius: 5px;
                     padding: 10px 0px;
 
-
-
                     .searchResultItem {
                         display: flex;
                         align-items: center;
@@ -76,32 +73,27 @@
                         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
                         background-color: themed("bg");
                         color: themed("textColor");
-                        padding: 10px;
                         border-radius: 10px;
                         margin: 5px;
-                    
                     }
-    
+
                     .searchResultItem:hover {
                         background-color: themed("bgSoft");
                     }
 
-                    
-                img {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    margin-right: 10px;
-                    object-fit: cover;
-                }
-                span {
-                    font-size: 18px;
-                    color: themed("textColor");
-                }
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                        object-fit: cover;
+                    }
 
-
+                    span {
+                        font-size: 18px;
+                        color: themed("textColor");
+                    }
                 }
-
             }
         }
 
@@ -135,97 +127,95 @@
                     color: themed("textColor");
                 }
             }
+
+            /* === Notification Section Styles Start === */
+            .notif-icon {
+                position: relative;
+               
+                cursor: pointer;
+
+                svg {
+                    font-size: 24px;
+                    color: themed("textColor");
+                }
+
+                .notif-count {
+                    position: absolute;
+                    top: -6px;
+                    right: -6px;
+                    background-color: red;
+                    color: white;
+                    font-size: 10px;
+                    padding: 2px 6px;
+                    border-radius: 50%;
+                    font-weight: bold;
+                }
+            }
+
+            .notif-dropdown {
+                position: absolute;
+                top: 70px;
+                right: 20px;
+                width: 350px;
+                max-height: 400px;
+                background-color: themed("bg");
+                border: 1px solid themed("border");
+                border-radius: 10px;
+                padding: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                overflow-y: auto;
+
+                p {
+                    margin: 0;
+                    text-align: center;
+                    color: themed("textColor");
+                }
+
+                .notif-item {
+                    display: flex;
+                    align-items: center;
+                    padding: 10px;
+                    gap: 10px;
+                    border-bottom: 1px solid themed("border");
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+
+                    &:hover {
+                        background-color: themed("bgSoft");
+                    }
+
+                    .profile-pic {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
+
+                    .notif-content {
+                        flex: 1;
+                        color: themed("textColor");
+                        font-size: 14px;
+
+                        .bold {
+                            font-weight: bold;
+                        }
+
+                        small {
+                            font-size: 12px;
+                            color: gray;
+                        }
+                    }
+
+                    .thumb {
+                        width: 40px;
+                        height: 40px;
+                        object-fit: cover;
+                        border-radius: 8px;
+                    }
+                }
+            }
+            /* === Notification Section Styles End === */
         }
     }
 }
-
-
-
-
-
-
-// @import"../../style.scss";
-
-// .navbar {
-//     @include themify($themes) {
-//         display: flex;
-//         justify-content: space-between;
-//         padding: 10px 20px;
-//         height: 50px;
-//         border-bottom: 1px solid themed("border");
-//         position: sticky;
-//         top: 0;
-//         background-color: themed("bg");
-//         color: themed("textColor");
-//         z-index: 999;
-
-//         .left {
-//             display: flex;
-//             align-items: center;
-//             gap: 30px;
-
-//             span {
-//                 font: bold;
-//                 font-size: 25px;
-//                 color: themed("logo");
-//             }
-
-//             .search {
-//                 display: flex;
-//                 align-items: center;
-//                 gap: 10px;
-//                 border: 1px solid themed("border");
-//                 border-radius: 5px;
-//                 padding: 5px;
-
-//                 input {
-//                     border: none;
-//                     width: 500px;
-//                     height: 100%;
-//                     background-color: transparent;
-//                     color: themed("textColor");
-
-//                     @include mobile {
-//                         display: none;
-//                     }
-
-//                     @include tablet {
-//                         width: 200px;
-//                     }
-
-
-//                 }
-//             }
-//         }
-
-//         .right {
-//             display: flex;
-//             align-items: center;
-//             gap: 20px;
-
-//             @include mobile {
-//                 display: none;
-//             }
-
-//             .user {
-//                 display: flex;
-//                 align-items: center;
-//                 gap: 10px;
-//                 font-weight: bolder;
-
-//                 @include tablet {
-//                     display: none;
-//                 }
-
-//                 img {
-//                     height: 30px;
-//                     width: 30px;
-//                     border-radius: 50%;
-//                     object-fit: cover;
-//                 }
-
-//                 span {}
-//             }
-//         }
-//     }
-// }

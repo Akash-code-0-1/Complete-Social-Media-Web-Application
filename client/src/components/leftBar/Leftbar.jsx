@@ -14,6 +14,9 @@ import { Link } from 'react-router-dom';
 
 import FriendsList from '../friends/Friends';
 import Gallery from "../gallery/Gallery";
+import { makeRequest } from "../../axios";
+import { useNavigate } from 'react-router-dom';
+import { FiLogOut } from "react-icons/fi";
 
 
 
@@ -22,9 +25,19 @@ const Leftbar = () => {
 
   const [showFriends, setShowFriends] = useState(false);
   const [openGallery, setOpenGallery] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setShowFriends((prev) => !prev);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await makeRequest.post("/auth/logout");
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
   };
 
 
@@ -135,6 +148,16 @@ const Leftbar = () => {
             <span>Groups</span>
           </div>
         </div>
+
+        {/* 🔚 Logout Section */}
+        <div className="menus">
+          <div className="item logout" onClick={handleLogout}>
+            <FiLogOut />
+            <span>Logout</span>
+          </div>
+        </div>
+
+
       </div>
     </div>
   )

@@ -2,6 +2,24 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { makeRequest } from "../../axios";
 import './Rightbar.scss';
+// import { useQuery } from "@tanstack/react-query";
+import moment from "moment";
+
+
+const getActivityText = (type, content) => {
+  switch (type) {
+    case "posted":
+      return `posted: \"${content}\"`;
+    case "commented":
+      return `commented: \"${content}\"`;
+    case "liked":
+      return `liked a post`;
+    case "story":
+      return `added a story`;
+    default:
+      return "did something";
+  }
+};
 
 
 const Rightbar = () => {
@@ -32,23 +50,23 @@ const Rightbar = () => {
     loadSuggestions();
   }, []);
 
-const rotateSuggestion = (userId) => {
-  setAllSuggestions(prevAll => {
-    const remaining = prevAll.filter(user => user.id !== userId);
+  const rotateSuggestion = (userId) => {
+    setAllSuggestions(prevAll => {
+      const remaining = prevAll.filter(user => user.id !== userId);
 
-    setVisibleSuggestions(prevVisible => {
-      const updated = prevVisible.filter(user => user.id !== userId);
-      const next = remaining.find(
-        user => !updated.some(u => u.id === user.id)
-      );
+      setVisibleSuggestions(prevVisible => {
+        const updated = prevVisible.filter(user => user.id !== userId);
+        const next = remaining.find(
+          user => !updated.some(u => u.id === user.id)
+        );
 
-      if (next) return [...updated, next].slice(0, 3);
-      return updated;
+        if (next) return [...updated, next].slice(0, 3);
+        return updated;
+      });
+
+      return remaining;
     });
-
-    return remaining;
-  });
-};
+  };
 
 
   const handleFollow = async (userId) => {
@@ -77,6 +95,81 @@ const rotateSuggestion = (userId) => {
     rotateSuggestion(userId);
   };
 
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const res = await makeRequest.get("/activities");
+        setData(res.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchActivities();
+  }, []);
+
+
+  // const [activities, setActivities] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(false);
+
+  // const getActivityText = (type, content) => {
+  //   if (type === "posted") return `shared a post: "${content}"`;
+  //   return "";
+  // };
+
+  // useEffect(() => {
+  //   const fetchActivities = async () => {
+  //     try {
+  //       const res = await makeRequest.get("/activities");
+  //       setActivities(res.data);
+  //     } catch (err) {
+  //       console.error("Activity fetch error", err);
+  //       setError(true);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchActivities();
+  // }, []);
+
+  const [friends, setFriends] = useState([]);
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const res = await makeRequest.get("/onlineFriends");
+        setFriends(res.data);
+      } catch (err) {
+        console.error("Error fetching online friends", err);
+      }
+    };
+    fetchFriends();
+  }, []);
+
+
+  const getStatusText = (user) => {
+    if (user.isOnline) return "Online now";
+    if (user.lastSeen) {
+      const time = moment(user.lastSeen);
+      const now = moment();
+      const diff = now.diff(time, 'minutes');
+
+      if (diff < 1) return "Active just now";
+      if (diff < 60) return `Active ${diff} min ago`;
+      if (diff < 1440) return `Active ${Math.floor(diff / 60)} hrs ago`;
+      return `Active ${time.format("MMMM D [at] h:mm A")}`;
+    }
+    return "Last seen unknown";
+  };
+
+
 
   return (
     <div className='rightbar'>
@@ -102,7 +195,56 @@ const rotateSuggestion = (userId) => {
 
         </div>
 
+
         <div className="item">
+          <span>Latest Activities</span>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error loading</p>
+          ) : (
+            data.slice(0, 5).map((a, i) => (
+              <div className="user" key={i}>
+                <div className="user_info">
+                  <img
+                    src={a.profilePic ? `/upload/${a.profilePic}` : "/default-profile.png"}
+                    alt="profile"
+                  />
+                  <p>
+                    <span>{a.name}</span> {getActivityText(a.type, a.content)}
+                  </p>
+                </div>
+                <span>{moment(a.createdAt).fromNow()}</span>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* <div className="item">
+          <span>Latest Activities</span>
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error loading activities</p>
+          ) : (
+            activities.map((a, i) => (
+              <div className="user" key={i}>
+                <div className="user_info">
+                  <img
+                    src={a.profilePic ? `/upload/${a.profilePic}` : "/default-profile.png"}
+                    alt=""
+                  />
+                  <p>
+                    <span>{a.name}</span> {getActivityText(a.type, a.content)}
+                  </p>
+                </div>
+                <span>{moment(a.createdAt).fromNow()}</span>
+              </div>
+            ))
+          )}
+        </div> */}
+
+        {/* <div className="item">
           <span>Latest Activities</span>
           <div className="user">
             <div className="user_info">
@@ -138,54 +280,31 @@ const rotateSuggestion = (userId) => {
           </div>
 
 
-        </div>
+        </div> */}
+
 
         <div className="item">
           <span>Online Friends</span>
-          <div className="user">
-            <div className="user_info">
-              <img src="https://images.pexels.com/photos/974266/pexels-photo-974266.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
-              <div className="online" />
-              <span>Shoriful</span>
+          {friends.map(friend => (
+            <div className="user" key={friend.id}>
+              <div className="user_info">
+                <img
+                  src={friend.profilePic ? "/upload/" + friend.profilePic : "/default-profile.png"}
+                  alt=""
+                />
+                <div className={friend.isOnline ? "online-dot" : "offline-dot"} />
+                <div className="info-text">
+                  <span>{friend.name}</span>
+                  <div className="status-text">{getStatusText(friend)}</div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="user">
-            <div className="user_info">
-              <img src="https://images.pexels.com/photos/246805/pexels-photo-246805.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
-              <div className="online" />
-              <span>Tuhin Rana</span>
-            </div>
-          </div>
-          <div className="user">
-            <div className="user_info">
-              <img src="https://images.pexels.com/photos/1619801/pexels-photo-1619801.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
-              <div className="online" />
-              <span>WK Siam</span>
-            </div>
-          </div>
-          <div className="user">
-            <div className="user_info">
-              <img src="https://images.pexels.com/photos/977796/pexels-photo-977796.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
-              <div className="online" />
-              <span>taohid</span>
-            </div>
-          </div>
-          <div className="user">
-            <div className="user_info">
-              <img src="https://images.pexels.com/photos/1205033/pexels-photo-1205033.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
-              <div className="online" />
-              <span>Muzahidul Islam</span>
-            </div>
-          </div>
-          <div className="user">
-            <div className="user_info">
-              <img src="https://images.pexels.com/photos/27658802/pexels-photo-27658802/free-photo-of-a-woman-in-a-white-shirt-and-jeans-standing-in-front-of-a-street.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
-              <div className="online" />
-              <span>Sumiya Rahman</span>
-            </div>
-          </div>
+
+          ))}
 
         </div>
+
+
 
       </div>
     </div>
