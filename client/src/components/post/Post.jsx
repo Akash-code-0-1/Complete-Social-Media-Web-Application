@@ -6,21 +6,20 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Share from '../share/Share';
 import moment from "moment";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedImg, setSelectedImg] = useState(null); // Added for image preview
 
   const { currentUser } = useContext(AuthContext);
 
-  // Updated `useQuery` to use object syntax
   const { isLoading, error, data } = useQuery({
     queryKey: ["likes", post.id],
     queryFn: () => makeRequest.get(`/likes?postId=${post.id}`).then((res) => res.data),
@@ -28,7 +27,6 @@ const Post = ({ post }) => {
 
   const queryClient = useQueryClient();
 
-  // Mutation for liking/unliking a post
   const likeMutation = useMutation({
     mutationFn: (liked) => {
       if (liked) {
@@ -37,15 +35,14 @@ const Post = ({ post }) => {
       return makeRequest.post("/likes", { postId: post.id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["likes"] }); // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["likes"] });
     },
   });
 
-  // Mutation for deleting a post
   const deletePostMutation = useMutation({
     mutationFn: (postId) => makeRequest.delete(`/posts/${postId}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] }); // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
@@ -63,7 +60,6 @@ const Post = ({ post }) => {
         <div className="user">
           <div className="userInfo">
             <img src={"/upload/" + post.profilePic} alt="" />
-            {/* <img src={post.profilePic} alt="" /> */}
             <div className="details">
               <Link
                 to={`/profile/${post.userId}`}
@@ -81,7 +77,12 @@ const Post = ({ post }) => {
         </div>
         <div className="content">
           <p>{post.desc}</p>
-          <img src={`/upload/${post.img}`} alt="" />
+          <img
+            src={`/upload/${post.img}`}
+            alt=""
+            onClick={() => setSelectedImg(`/upload/${post.img}`)} // Preview on click
+            style={{ cursor: "pointer" }}
+          />
         </div>
         <div className="info">
           <div className="item">
@@ -107,6 +108,13 @@ const Post = ({ post }) => {
           </div>
         </div>
         {commentOpen && <Comments postId={post.id} />}
+
+        {/* Image Preview Modal */}
+        {selectedImg && (
+          <div className="image-preview" onClick={() => setSelectedImg(null)}>
+            <img src={selectedImg} alt="Full preview" />
+          </div>
+        )}
       </div>
     </div>
   );
