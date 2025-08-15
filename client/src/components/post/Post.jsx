@@ -13,6 +13,8 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/authContext";
 
+
+
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,6 +47,9 @@ const Post = ({ post }) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
+
+
+
 
   const handleLike = () => {
     likeMutation.mutate(data.includes(currentUser.id));
@@ -119,5 +124,7 @@ const Post = ({ post }) => {
     </div>
   );
 };
+
+
 
 export default Post;
