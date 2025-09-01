@@ -13,12 +13,6 @@ import notificationRoutes from "./routes/notifications.js";
 import onlineFriendsRoutes from "./routes/onlineFriends.js";
 
 
-
-
-
-
-
-
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";

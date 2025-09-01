@@ -1,12 +1,9 @@
 import express from "express";
-// import { getPosts, addPost } from "../controllers/post.js";
-import {getPosts,addPost} from "../controllers/post.js";
+import { getPosts, addPost } from "../controllers/post.js";
 
 const router = express.Router();
 
-// router.get("/", getPosts);
-router.get("/",getPosts)
-router.post("/", addPost);
-// router.delete("/:id", deletePost);
+router.get("/", getPosts);   // feed or profile posts
+router.post("/", addPost);   // add new post
 
 export default router;
